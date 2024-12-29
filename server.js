@@ -42,6 +42,6 @@ app.post("/templates/:name", (req, res) => {
     res.json({ message: "Template updated successfully!" });
 });
 
-// Start server on just for streak 025 i am here into the streak   
+// Start server on just for streak 025 i am here into   
 const PORT = 5050;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
