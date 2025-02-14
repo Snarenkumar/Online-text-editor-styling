@@ -3,38 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Template Editor</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <title>Template Editor</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        #editor-container { height: 300px; background: #fff; border: 1px solid #ccc; margin: 20px auto; width: 80%; }
-        #preview { border: 1px solid #ccc; margin-top: 20px; padding: 10px; min-height: 200px; width: 80%; margin: 20px auto; }
-        button { margin: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .editor-container { display: flex; gap: 20px; }
+        .form-container { width: 30%; }
+        .preview-container { width: 70%; }
+        #preview { border: 1px solid #ccc; padding: 20px; background-color: #f9f9f9; }
+        select, input, textarea, button { width: 100%; padding: 10px; margin-bottom: 10px; }
+        button { background-color: #007BFF; color: #fff; border: none; cursor: pointer; }
+        button:hover { background-color: #005bb5; }
     </style>
 </head>
 <body>
 
-    <h1>HTML Template Editor</h1>
+    <h1>Template Editor</h1>
 
-    <label for="template-selector">📂 Select a Template:</label>
-    <select id="template-selector" onchange="loadTemplate()">
-        <option value="">Select a template</option>
+    <!-- Dropdown to select templates -->
+    <label for="templateSelect">Select Template:</label>
+    <select id="templateSelect" onchange="loadTemplate()">
+        <option value="">Loading templates...</option>
     </select>
 
+    <div class="editor-container">
+        <div class="form-container">
+            <h2>Customize Template</h2>
+            <label for="backgroundColor">Background Color:</label>
+            <input type="color" id="backgroundColor">
 
-    
-    <textarea id="editor-container"></textarea>
-    
+            <label for="headingText">Heading Text:</label>
+            <input type="text" id="headingText">
 
-    <button onclick="saveTemplate()">💾 Save Template</button>
-    <button onclick="renderHTML()">🔍 Render HTML</button>
-    <button onclick="exportHTML()">📥 Export HTML</button>
+            <label for="headingColor">Heading Color:</label>
+            <input type="color" id="headingColor">
 
-    <h2>HTML Preview down</h2>
-    <div id="preview"></div>
+            <label for="buttonText">Button Text:</label>
+            <input type="text" id="buttonText">
+
+            <label for="buttonColor">Button Color:</label>
+            <input type="color" id="buttonColor">
+
+            <label for="buttonTextColor">Button Text Color:</label>
+            <input type="color" id="buttonTextColor">
+
+            <button onclick="updatePreview()">Update Preview</button>
+            <button onclick="saveTemplate()">💾 Save Template</button>
+        </div>
+
+        <div class="preview-container">
+            <h2>Preview</h2>
+            <div id="preview"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
