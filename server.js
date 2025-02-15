@@ -6,16 +6,16 @@ const path = require("path");
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static("public")); // Serve frontend files
 
 const templatesDir = path.join(__dirname, "templates");
 
-// Ensure templates directory exists
+// Create templates directory if it doesn't exist
 if (!fs.existsSync(templatesDir)) {
     fs.mkdirSync(templatesDir);
 }
 
-// Fetch all templates
+// 📌 Get all HTML templates
 app.get("/templates", (req, res) => {
     fs.readdir(templatesDir, (err, files) => {
         if (err) return res.status(500).json({ error: "Failed to load templates." });
@@ -24,7 +24,7 @@ app.get("/templates", (req, res) => {
     });
 });
 
-// Fetch a specific template
+// 📌 Get a specific template
 app.get("/templates/:name", (req, res) => {
     const templatePath = path.join(templatesDir, `${req.params.name}.html`);
     if (!fs.existsSync(templatePath)) return res.status(404).json({ error: "Template not found." });
@@ -33,7 +33,7 @@ app.get("/templates/:name", (req, res) => {
     res.json({ content });
 });
 
-// Save an updated template
+// 📌 Save updated HTML template
 app.post("/templates/:name", (req, res) => {
     const templatePath = path.join(templatesDir, `${req.params.name}.html`);
     if (!req.body.content) return res.status(400).json({ error: "No content provided." });
@@ -43,6 +43,5 @@ app.post("/templates/:name", (req, res) => {
 });
 
 // Start server
-const PORT = 5000;
+const PORT = 5050;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    

@@ -1,76 +1,87 @@
+const editor = CodeMirror.fromTextArea(document.getElementById("editor-container"), {
+    mode: "htmlmixed",
+    lineNumbers: true,
+    theme: "default",
+});
+
 const apiBase = "http://localhost:5000";
 
-// Load available templates in the dropdown
+// 📌 Load templates into dropdown
 async function loadTemplates() {
     try {
-        const response = await axios.get(`${apiBase}/templates`);
-        const templates = response.data.templates;
-        const templateSelect = document.getElementById("templateSelect");
+        const res = await axios.get(`${apiBase}/templates`);
+        const templates = res.data.templates;
+        const selector = document.getElementById("template-selector");
 
-        templateSelect.innerHTML = `<option value="">Select a template</option>`;
+        selector.innerHTML = `<option value="">Select a template</option>`;
         templates.forEach(template => {
-            templateSelect.innerHTML += `<option value="${template}">${template}</option>`;
+            const option = document.createElement("option");
+            option.value = template;
+            option.innerText = template;
+            selector.appendChild(option);
         });
     } catch (error) {
         console.error("Failed to load templates:", error);
+        alert("Failed to load templates. Check the console for details.");
     }
 }
 
-// Load selected template into preview
+// 📌 Load selected template into CodeMirror editor
 async function loadTemplate() {
-    const templateName = document.getElementById("templateSelect").value;
+    const templateName = document.getElementById("template-selector").value;
     if (!templateName) return;
 
     try {
-        const response = await axios.get(`${apiBase}/templates/${templateName}`);
-        document.getElementById("preview").innerHTML = response.data.content;
+        const res = await axios.get(`${apiBase}/templates/${templateName}`);
+        editor.setValue(res.data.content); // Load content into CodeMirror
+        renderHTML(); // Render the template immediately after loading
     } catch (error) {
         console.error("Failed to load template:", error);
-        alert("Error loading template.");
+        alert("Failed to load template. Check the console for details.");
     }
 }
 
-// Update preview based on user input
-function updatePreview() {
-    const backgroundColor = document.getElementById("backgroundColor").value;
-    const headingText = document.getElementById("headingText").value;
-    const headingColor = document.getElementById("headingColor").value;
-    const buttonText = document.getElementById("buttonText").value;
-    const buttonColor = document.getElementById("buttonColor").value;
-    const buttonTextColor = document.getElementById("buttonTextColor").value;
-
-    const updatedTemplate = `
-        <div style="background-color: ${backgroundColor}; padding: 30px; text-align: center; font-family: Arial, sans-serif;">
-            <h1 style="color: ${headingColor};">${headingText}</h1>
-            <p>Hello <strong>[User]</strong>,</p>
-            <p>We received a request to reset your password. Click the button below to set a new password.</p>
-            <a href="[Reset_Link]" style="display: inline-block; background-color: ${buttonColor}; color: ${buttonTextColor}; padding: 12px 25px; text-decoration: none; border-radius: 5px;">${buttonText}</a>
-            <p style="margin-top: 20px;">If you didn't request this, please ignore this email.</p>
-            <p style="color: #888;">Stay safe, <br><strong>The [Company] Security Team</strong></p>
-        </div>
-    `;
-
-    document.getElementById("preview").innerHTML = updatedTemplate;
-}
-
-// Save template to the server
-async function saveTemplate() {
-    const templateName = document.getElementById("templateSelect").value;
-    if (!templateName) {
-        alert("Please select a template to save.");
-        return;
-    }
-
-    const templateContent = document.getElementById("preview").innerHTML;
+// 📌 Render HTML
+async function renderHTML() {
+    const htmlContent = editor.getValue();
 
     try {
-        await axios.post(`${apiBase}/templates/${templateName}`, { content: templateContent });
+        document.getElementById("preview").innerHTML = htmlContent;
+    } catch (error) {
+        console.error("Failed to render HTML:", error);
+        alert("Failed to render HTML. Check the console for details.");
+    }
+}
+
+// 📌 Save edited HTML
+async function saveTemplate() {
+    const templateName = document.getElementById("template-selector").value;
+    if (!templateName) return alert("Select a template first");
+
+    const updatedContent = editor.getValue();
+
+    try {
+        await axios.post(`${apiBase}/templates/${templateName}`, { content: updatedContent });
         alert("Template saved successfully!");
     } catch (error) {
         console.error("Failed to save template:", error);
-        alert("Failed to save template.");
+        alert("Failed to save template. Check the console for details.");
     }
 }
 
-// Initialize templates on page load
-window.onload = loadTemplates;
+// 📌 Export HTML
+function exportHTML() {
+    const htmlContent = document.getElementById("preview").innerHTML;
+    if (!htmlContent) return alert("No HTML content to export.");
+
+    const blob = new Blob([htmlContent], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "template.html";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// 📌 Load templates on page load
+loadTemplates();
