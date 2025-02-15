@@ -4,7 +4,7 @@ const editor = CodeMirror.fromTextArea(document.getElementById("editor-container
     theme: "default",
 });
 
-const apiBase = "http://localhost:5000";
+const apiBase = "http://localhost:5050";
 
 // 📌 Load templates into dropdown
 async function loadTemplates() {
