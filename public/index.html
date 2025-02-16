@@ -20,16 +20,29 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <h1>Premium HTML Template Editor</h1>
+    <h1> Template Editor</h1>
+
+
+    <div class="text">
+        <h3>📂 Select a Below  Template to Start:</h3>
+    </div>
+    
+    <div class="templateSelector">
+        <select id="template-selector" onchange="loadTemplate()">
+            <option value="">Select a template</option>
+        </select>
+
+
+    </div>
+
+
 
     <div class="container">
+
         <!-- Editor Panel -->
         <div class="editor-panel">
-            <label for="template-selector">📂 Select a Template:</label>
-            <select id="template-selector" onchange="loadTemplate()">
-                <option value="">Select a template</option>
-            </select>
-
+            <label for="template-selector"></label>
+            
             <textarea id="editor-container"></textarea>
             <div class="controls">
                 <button onclick="formatCode()">✨ Format Code</button>

@@ -22,7 +22,19 @@ h1 {
     gap: 20px;
     padding: 20px;
 }
+.text h3 {
+    font-size: 30px ;
+    text-align:center ;
+}
+.text 
+ {
 
+    margin: 27px auto ;
+}
+.templateSelector {
+    text-align:center ;
+
+}
 .editor-panel, .preview-panel {
     background-color: #2d2d2d; /* Dark panel background */
     border-radius: 10px;
