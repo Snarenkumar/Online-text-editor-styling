@@ -1,18 +1,23 @@
+// Initialize CodeMirror with HTML syntax highlighting
 const editor = CodeMirror.fromTextArea(document.getElementById("editor-container"), {
-    mode: "htmlmixed",
+    mode: "htmlmixed",  
     lineNumbers: true,
-    theme: "default",
+    theme: "dracula",   
+    autoCloseTags: true,
+    autoCloseBrackets: true
 });
 
-const apiBase = "http://localhost:5050";
+// Check if running locally (for testing)
+const apiBase = window.location.hostname === "localhost" ? "http://localhost:5050" : "https://your-live-api.com";  
 
-// 📌 Load templates into dropdown
+// 📌 Load Templates into Dropdown
 async function loadTemplates() {
     try {
         const res = await axios.get(`${apiBase}/templates`);
         const templates = res.data.templates;
         const selector = document.getElementById("template-selector");
 
+        // Reset options
         selector.innerHTML = `<option value="">Select a template</option>`;
         templates.forEach(template => {
             const option = document.createElement("option");
@@ -22,56 +27,39 @@ async function loadTemplates() {
         });
     } catch (error) {
         console.error("Failed to load templates:", error);
-        alert("Failed to load templates. Check the console for details.");
+        alert("Failed to load templates.");
     }
 }
 
-// 📌 Load selected template into CodeMirror editor
+// 📌 Load Selected Template into Editor
 async function loadTemplate() {
     const templateName = document.getElementById("template-selector").value;
     if (!templateName) return;
 
     try {
         const res = await axios.get(`${apiBase}/templates/${templateName}`);
-        editor.setValue(res.data.content); // Load content into CodeMirror
-        renderHTML(); // Render the template immediately after loading
+        editor.setValue(res.data.content);  
+        renderHTML();  
     } catch (error) {
         console.error("Failed to load template:", error);
-        alert("Failed to load template. Check the console for details.");
+        alert("Failed to load template.");
     }
 }
 
-// 📌 Render HTML
-async function renderHTML() {
+// 📌 Render HTML in Preview Panel
+function renderHTML() {
     const htmlContent = editor.getValue();
-
-    try {
-        document.getElementById("preview").innerHTML = htmlContent;
-    } catch (error) {
-        console.error("Failed to render HTML:", error);
-        alert("Failed to render HTML. Check the console for details.");
-    }
+    document.getElementById("preview").innerHTML = sanitizeHTML(htmlContent);
 }
 
-// 📌 Save edited HTML
-async function saveTemplate() {
-    const templateName = document.getElementById("template-selector").value;
-    if (!templateName) return alert("Select a template first");
-
-    const updatedContent = editor.getValue();
-
-    try {
-        await axios.post(`${apiBase}/templates/${templateName}`, { content: updatedContent });
-        alert("Template saved successfully!");
-    } catch (error) {
-        console.error("Failed to save template:", error);
-        alert("Failed to save template. Check the console for details.");
-    }
+// 📌 Prevent XSS & Ensure Safe HTML Rendering
+function sanitizeHTML(html) {
+    return html.replace(/<script.*?>.*?<\/script>/gi, "").replace(/on\w+=".*?"/g, "");  
 }
 
-// 📌 Export HTML
+// 📌 Export Rendered HTML
 function exportHTML() {
-    const htmlContent = document.getElementById("preview").innerHTML;
+    const htmlContent = editor.getValue();
     if (!htmlContent) return alert("No HTML content to export.");
 
     const blob = new Blob([htmlContent], { type: "text/html" });
@@ -83,5 +71,5 @@ function exportHTML() {
     URL.revokeObjectURL(url);
 }
 
-// 📌 Load templates on page load
+// 📌 Load Templates on Page Load
 loadTemplates();

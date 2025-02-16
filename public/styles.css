@@ -1,6 +1,6 @@
 /* Global Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Fira Code', monospace;
     margin: 0;
     padding: 0;
     background-color: #1e1e1e; /* Dark background */
@@ -17,6 +17,7 @@ h1 {
 /* Split Layout */
 .container {
     display: flex;
+    flex-wrap: wrap;
     height: calc(100vh - 100px);
     gap: 20px;
     padding: 20px;
@@ -25,15 +26,10 @@ h1 {
 .editor-panel, .preview-panel {
     background-color: #2d2d2d; /* Dark panel background */
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Darker shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     padding: 20px;
     flex: 1;
-}
-
-.editor-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    min-width: 300px;
 }
 
 .preview-panel {
@@ -43,40 +39,22 @@ h1 {
 /* CodeMirror Editor */
 .CodeMirror {
     height: calc(100vh - 200px) !important;
+    margin-top: 5px;
+    padding-top: 15px;
     border-radius: 8px;
-    border: 1px solid #444; /* Dark border */
-    font-family: 'Fira Code', monospace;
-    font-size: 14px;
-    background-color: #1e1e1e; /* Dark editor background */
-    color: #e0e0e0; /* Light text */
+    border: 1px solid #444;
+    font-size: 16px;
+    background-color: #282a36; /* Dracula Theme */
+    color: #f8f8f2;
 }
 
-.CodeMirror-gutters {
-    background-color: #1e1e1e; /* Dark gutter background */
-    border-right: 1px solid #444; /* Dark border */
-}
-
-.CodeMirror-linenumber {
-    color: #888; /* Light line numbers */
-}
-
-/* Dropdown */
-#template-selector {
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #444; /* Dark border */
-    border-radius: 5px;
-    background-color: #2d2d2d; /* Dark background */
-    color: #e0e0e0; /* Light text */
-}
+/* Syntax Highlighting */
+.cm-s-dracula .cm-tag { color: #ff79c6; }
+.cm-s-dracula .cm-attribute { color: #50fa7b; }
+.cm-s-dracula .cm-string { color: #f1fa8c; }
+.cm-s-dracula .cm-comment { color: #6272a4; }
 
 /* Buttons */
-.controls {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-}
-
 button {
     padding: 10px 20px;
     font-size: 14px;
@@ -93,28 +71,21 @@ button:hover {
     background-color: #005bb5;
 }
 
-/* Preview Section */
-#preview {
-    padding: 20px;
-    background-color: #1e1e1e; /* Dark preview background */
-    border-radius: 8px;
-    border: 1px solid #444; /* Dark border */
-    min-height: 200px;
-    color: #e0e0e0; /* Light text */
-}
-
-/* Responsive Design */
+/* Responsive Layout */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
         height: auto;
     }
-
-    .editor-panel, .preview-panel {
-        width: 100%;
-    }
-
     .CodeMirror {
         height: 300px !important;
     }
 }
+
+
+
+
+
+
+
+
