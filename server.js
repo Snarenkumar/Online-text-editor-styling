@@ -42,6 +42,6 @@ app.post("/templates/:name", (req, res) => {
     res.json({ message: "Template updated successfully!" });
 });
 
-// Start server
+// Start server on empyt comment
 const PORT = 5050;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
