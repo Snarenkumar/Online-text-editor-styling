@@ -10,7 +10,7 @@ app.use(express.static("public")); // Serve frontend files
 
 const templatesDir = path.join(__dirname, "templates");
 
-// Create templates  fixed the error s directory if it doesn't exist
+// Create templates  directory if it doesn't exist
 if (!fs.existsSync(templatesDir)) {
     fs.mkdirSync(templatesDir);
 }
@@ -33,7 +33,7 @@ app.get("/templates/:name", (req, res) => {
     res.json({ content });
 });
 
-// 📌 Save updated HTML template
+// 📌 Save updated HTML template from the path 
 app.post("/templates/:name", (req, res) => {
     const templatePath = path.join(templatesDir, `${req.params.name}.html`);
     if (!req.body.content) return res.status(400).json({ error: "No content provided." });
