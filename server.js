@@ -10,7 +10,7 @@ app.use(express.static("public")); // Serve frontend files
 
 const templatesDir = path.join(__dirname, "templates");
 
-// Create templates directory if it doesn't exist
+// Create templates  fixed the error s directory if it doesn't exist
 if (!fs.existsSync(templatesDir)) {
     fs.mkdirSync(templatesDir);
 }
