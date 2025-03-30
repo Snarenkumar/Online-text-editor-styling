@@ -10,10 +10,12 @@ app.use(express.static("public")); // Serve frontend files
 
 const templatesDir = path.join(__dirname, "templates");
 
+
 // Create templates  directory if it doesn't exist
 if (!fs.existsSync(templatesDir)) {
     fs.mkdirSync(templatesDir);
 }
+
 
 // 📌 Get all HTML templates
 app.get("/templates", (req, res) => {
@@ -30,6 +32,7 @@ app.get("/templates/:name", (req, res) => {
     if (!fs.existsSync(templatePath)) return res.status(404).json({ error: "Template not found." });
 
     const content = fs.readFileSync(templatePath, "utf8");
+    console.log(content)+
     res.json({ content });
 });
 
@@ -41,6 +44,8 @@ app.post("/templates/:name", (req, res) => {
     fs.writeFileSync(templatePath, req.body.content, "utf8");
     res.json({ message: "Template updated successfully!" });
 });
+
+
 
 // Start server on   
 const PORT = 5050;
